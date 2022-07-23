@@ -45,18 +45,30 @@ def plot_pdcm_pdcc(taranga_lc):
     :type taranga_lc: _type_
     """
     fig = plt.figure(figsize=(6, 6))
-    outlier_corr_applied = taranga_lc["pdcm"] - taranga_lc["pdcc"]
+    outlier_corr_applied = taranga_lc["pdcm"].to_numpy() - taranga_lc["pdcc"].to_numpy()
     colors = np.where(outlier_corr_applied == 0, "k", "r")
+    filter = colors == "k"
 
     ax1 = plt.subplot(211)
     plt.plot(
         taranga_lc["bjd"],
         taranga_lc["pdcm"],
-        color=colors,
+        color="k",
         marker="o",
         ms=1.0,
         linestyle="None",
     )
+    plt.plot(
+        taranga_lc["bjd"][~filter],
+        taranga_lc["pdcm"][~filter],
+        color="r",
+        marker="o",
+        markerfacecolor="none",
+        markeredgewidth=3,
+        ms=1.0,
+        linestyle="None",
+    )
+
     plt.ylabel("PDCM")
     ax2 = plt.subplot(212, sharey=ax1)
     plt.plot(
